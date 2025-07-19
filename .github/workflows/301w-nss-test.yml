@@ -31,7 +31,7 @@ jobs:
       run: |
         echo "CONFIG_TARGET_qualcommax=y" >> .config
         echo "CONFIG_TARGET_qualcommax_ipq807x=y" >> .config
-        echo "CONFIG_TARGET_qualcommax_ipq807x_DEVICE_qhora-301w=y" >> .config
+        echo "CONFIG_TARGET_qualcommax_ipq807x_DEVICE_qnap-301w=y" >> .config
 
         # NSS 模块
         echo "CONFIG_PACKAGE_kmod-qca-nss-drv=y" >> .config
