@@ -25,7 +25,7 @@ jobs:
         
     - name: Generate config for QHora-301W with NSS
       run: |
-        cat <<EOF > .config
+      cat <<EOF > .config
         CONFIG_TARGET_qualcommax=y
         CONFIG_TARGET_qualcommax_ipq807x=y
         CONFIG_TARGET_qualcommax_ipq807x_DEVICE_qhora-301w=y
