@@ -29,53 +29,51 @@ jobs:
 
     - name: Generate .config
       run: |
-        cat <<EOF > .config
-          CONFIG_TARGET_qualcommax=y
-          CONFIG_TARGET_qualcommax_ipq807x=y
-          CONFIG_TARGET_qualcommax_ipq807x_DEVICE_qhora-301w=y
+        echo "CONFIG_TARGET_qualcommax=y" >> .config
+        echo "CONFIG_TARGET_qualcommax_ipq807x=y" >> .config
+        echo "CONFIG_TARGET_qualcommax_ipq807x_DEVICE_qhora-301w=y" >> .config
 
-# NSS 模块
-          CONFIG_PACKAGE_kmod-qca-nss-drv=y
-          CONFIG_PACKAGE_kmod-qca-nss-ecm=y
-          CONFIG_PACKAGE_kmod-qca-nss-ifb=y
-          CONFIG_PACKAGE_kmod-qca-nss-drv-qdisc=y
-          CONFIG_PACKAGE_kmod-qca-nss-drv-pppoe=y
-          CONFIG_PACKAGE_kmod-qca-nss-drv-vlan=y
-          CONFIG_PACKAGE_kmod-qca-nss-dp=y
-          CONFIG_PACKAGE_kmod-qca-nss-gmac=y
-          CONFIG_PACKAGE_kmod-qca-nss-sfe=y
-          CONFIG_PACKAGE_kmod-qca-nss-cfi=y
-          CONFIG_PACKAGE_qca-nss-userspace=y
-          CONFIG_PACKAGE_qca-nss-ecm=y
+        # NSS 模块
+        echo "CONFIG_PACKAGE_kmod-qca-nss-drv=y" >> .config
+        echo "CONFIG_PACKAGE_kmod-qca-nss-ecm=y" >> .config
+        echo "CONFIG_PACKAGE_kmod-qca-nss-ifb=y" >> .config
+        echo "CONFIG_PACKAGE_kmod-qca-nss-drv-qdisc=y" >> .config
+        echo "CONFIG_PACKAGE_kmod-qca-nss-drv-pppoe=y" >> .config
+        echo "CONFIG_PACKAGE_kmod-qca-nss-drv-vlan=y" >> .config
+        echo "CONFIG_PACKAGE_kmod-qca-nss-dp=y" >> .config
+        echo "CONFIG_PACKAGE_kmod-qca-nss-gmac=y" >> .config
+        echo "CONFIG_PACKAGE_kmod-qca-nss-sfe=y" >> .config
+        echo "CONFIG_PACKAGE_kmod-qca-nss-cfi=y" >> .config
+        echo "CONFIG_PACKAGE_qca-nss-userspace=y" >> .config
+        echo "CONFIG_PACKAGE_qca-nss-ecm=y" >> .config
 
-# RTL8125 驱动
-          CONFIG_PACKAGE_kmod-r8125=y
+        # RTL8125 驱动
+        echo "CONFIG_PACKAGE_kmod-r8125=y" >> .config
 
-# WiFi 驱动
-          CONFIG_PACKAGE_kmod-ath11k=y
-          CONFIG_PACKAGE_ath11k-firmware-ipq8074=y
-          CONFIG_PACKAGE_wireless-regdb=y
+        # WiFi 驱动
+        echo "CONFIG_PACKAGE_kmod-ath11k=y" >> .config
+        echo "CONFIG_PACKAGE_ath11k-firmware-ipq8074=y" >> .config
+        echo "CONFIG_PACKAGE_wireless-regdb=y" >> .config
 
-# Luci 和主题
-          CONFIG_PACKAGE_luci=y
-          CONFIG_PACKAGE_luci-theme-argon=y
-          CONFIG_PACKAGE_luci-app-firewall=y
-          CONFIG_PACKAGE_luci-app-opkg=y
-          CONFIG_PACKAGE_luci-app-ttyd=y
+        # Luci 和主题
+        echo "CONFIG_PACKAGE_luci=y" >> .config
+        echo "CONFIG_PACKAGE_luci-theme-argon=y" >> .config
+        echo "CONFIG_PACKAGE_luci-app-firewall=y" >> .config
+        echo "CONFIG_PACKAGE_luci-app-opkg=y" >> .config
+        echo "CONFIG_PACKAGE_luci-app-ttyd=y" >> .config
 
-# nlbwmon 流量监控
-          CONFIG_PACKAGE_luci-app-nlbwmon=y
-          CONFIG_PACKAGE_nlbwmon=y
+        # nlbwmon 流量监控
+        echo "CONFIG_PACKAGE_luci-app-nlbwmon=y" >> .config
+        echo "CONFIG_PACKAGE_nlbwmon=y" >> .config
 
-# 系统实用工具
-          CONFIG_PACKAGE_htop=y
-          CONFIG_PACKAGE_tcpdump=y
-          CONFIG_PACKAGE_nano=y
+        # 系统工具
+        echo "CONFIG_PACKAGE_htop=y" >> .config
+        echo "CONFIG_PACKAGE_tcpdump=y" >> .config
+        echo "CONFIG_PACKAGE_nano=y" >> .config
 
-# 构建信息
-          CONFIG_BUILD_LOG=y
-          CONFIG_DEVEL=y
-          EOF
+        # 构建信息
+        echo "CONFIG_BUILD_LOG=y" >> .config
+        echo "CONFIG_DEVEL=y" >> .config
 
     - name: Run defconfig
       run: make defconfig
