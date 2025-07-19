@@ -23,7 +23,7 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
 
-        - name: Generate config for QHora-301W with NSS
+    - name: Generate config for QHora-301W with NSS
       run: |
         rm -f .config
         echo 'CONFIG_TARGET_qualcommax=y' >> .config
