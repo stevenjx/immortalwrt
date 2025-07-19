@@ -28,7 +28,7 @@ jobs:
         rm -f .config
         echo 'CONFIG_TARGET_qualcommax=y' >> .config
         echo 'CONFIG_TARGET_qualcommax_ipq807x=y' >> .config
-        echo 'CONFIG_TARGET_qualcommax_ipq807x_DEVICE_qhora-301w=y' >> .config
+        echo 'CONFIG_TARGET_qualcommax_ipq807x_DEVICE_qnap_301w=y' >> .config
 
         echo 'CONFIG_PACKAGE_kmod-qca-nss-drv=y' >> .config
         echo 'CONFIG_PACKAGE_kmod-qca-nss-ecm=y' >> .config
@@ -63,7 +63,11 @@ jobs:
 
         echo 'CONFIG_DEVEL=y' >> .config
         echo 'CONFIG_BUILD_LOG=y' >> .config
-
+        
+        echo 'CONFIG_PACKAGE_kmod-r8169=y' >> .config
+        echo 'CONFIG_PACKAGE_kmod-usb-net-rtl8152=y' >> .config
+        echo 'CONFIG_PACKAGE_kmod-usb-net-rtl8152-vendor=y' >> .config
+        
     - name: Run defconfig
       run: make defconfig
 
