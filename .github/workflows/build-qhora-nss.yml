@@ -22,7 +22,7 @@ jobs:
       run: |
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-
+        
     - name: Generate config for QHora-301W with NSS
       run: |
         cat <<EOF > .config
