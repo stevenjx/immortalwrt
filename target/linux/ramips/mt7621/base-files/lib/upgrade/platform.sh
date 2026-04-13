@@ -45,6 +45,7 @@ platform_do_upgrade() {
 			fw_setenv --lock / bootImage 0 || exit 1
 		fi
 		;;
+	iptime,ax2002m|\
 	iptime,ax2004m)
 		if [ "$(fw_printenv -n boot_from 2>/dev/null)" != "firmware1" ]; then
 			fw_setenv boot_from firmware1 || exit 1
@@ -84,6 +85,7 @@ platform_do_upgrade() {
 	c-life,xg1|\
 	dlink,covr-x1860-a1|\
 	dlink,dap-x1860-a1|\
+	dlink,dir-1360-a1|\
 	dlink,dir-1960-a1|\
 	dlink,dir-2055-a1|\
 	dlink,dir-2150-a1|\
@@ -94,6 +96,7 @@ platform_do_upgrade() {
 	dlink,dir-3060-a1|\
 	dlink,dir-853-a3|\
 	dlink,dir-x1860-b1|\
+	edup,ep-rt2960s|\
 	elecom,wmc-x1800gst|\
 	elecom,wsc-x1800gs|\
 	etisalat,s3|\
@@ -105,9 +108,11 @@ platform_do_upgrade() {
 	gemtek,wvrtm-127acn|\
 	gemtek,wvrtm-130acn|\
 	iptime,a3004t|\
+	iptime,ax2002m|\
 	iptime,ax2004m|\
 	iptime,t5004|\
 	jcg,q20|\
+	keenetic,kn-1910|\
 	keenetic,kn-3510|\
 	linksys,e5600|\
 	linksys,e7350|\
@@ -152,6 +157,7 @@ platform_do_upgrade() {
 	xiaomi,mi-router-cr6609|\
 	xiaomi,redmi-router-ac2100|\
 	z-router,zr-2660|\
+	z-router,zr-2662|\
 	zte,e8820s|\
 	zyxel,nwa50ax|\
 	zyxel,nwa55axe)

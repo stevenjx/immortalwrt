@@ -146,7 +146,7 @@ list_conffiles() {
 		' /usr/lib/opkg/status
 	elif [ -d /lib/apk/packages ]; then
 		conffiles=""
-		for file in /lib/apk/packages/*.conffiles_static; do
+		for file in $(find /lib/apk/packages -name "*.conffiles_static" -type f); do
 			conffiles="$(echo -e "$(cat $file)\n$conffiles")"
 		done
 		echo "$conffiles"
@@ -191,7 +191,7 @@ build_list_of_backup_overlay_files() {
 		list_conffiles | cut -f2 -d ' ' | sort -u > "$conffiles"
 
 		# backup files from /etc/sysupgrade.conf and /lib/upgrade/keep.d, but
-		# ignore those aready controlled by opkg conffiles
+		# ignore those already controlled by opkg conffiles
 		list_static_conffiles | sort -u |
 			grep -h -v -x -F -f $conffiles > "$keepfiles"
 

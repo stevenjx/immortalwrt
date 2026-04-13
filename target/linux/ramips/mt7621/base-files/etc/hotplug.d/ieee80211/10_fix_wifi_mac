@@ -57,11 +57,6 @@ case "$board" in
 		[ "$PHYNBR" = "1" ] && \
 			macaddr_add $label_mac 2 > /sys${DEVPATH}/macaddress
 		;;
-	dlink,dir-3040-a1)
-		lan_mac_addr="$(mtd_get_mac_binary factory 0xe000)"
-		[ "$PHYNBR" = "0" ] && \
-			macaddr_add $lan_mac_addr 2 > /sys${DEVPATH}/macaddress
-		;;
 	dlink,dir-853-a3)
 		[ "$PHYNBR" = "0" ] && \
 			macaddr_setbit_la "$(mtd_get_mac_binary factory 0xe000)" \
@@ -74,19 +69,20 @@ case "$board" in
 			macaddr_setbit_la "$base_mac" > /sys${DEVPATH}/macaddress
 		fi
 		;;
-	h3c,tx1800-plus|\
-	h3c,tx1801-plus|\
-	h3c,tx1806)
-		addr=$(macaddr_setbit $(macaddr_add $(mtd_get_mac_ascii u-boot-env ethaddr) 2) 7)
-		[ "$PHYNBR" = "0" ] && echo -n ${addr:0:9}'1'${addr:10:7} > /sys${DEVPATH}/macaddress
-		[ "$PHYNBR" = "1" ] && echo -n ${addr:0:9}'7'${addr:10:7} > /sys${DEVPATH}/macaddress
-		;;
+	edup,ep-rt2960s|\
 	haier,har-20s2u1|\
 	jcg,y2|\
 	sim,simax1800t|\
 	sim,simax1800u)
 		[ "$PHYNBR" = "1" ] && \
 			macaddr_setbit_la "$(mtd_get_mac_binary factory 0x4)" > /sys${DEVPATH}/macaddress
+		;;
+	h3c,tx1800-plus|\
+	h3c,tx1801-plus|\
+	h3c,tx1806)
+		addr=$(macaddr_setbit $(macaddr_add $(mtd_get_mac_ascii u-boot-env ethaddr) 2) 7)
+		[ "$PHYNBR" = "0" ] && echo -n ${addr:0:9}'1'${addr:10:7} > /sys${DEVPATH}/macaddress
+		[ "$PHYNBR" = "1" ] && echo -n ${addr:0:9}'7'${addr:10:7} > /sys${DEVPATH}/macaddress
 		;;
 	hiwifi,hc5962)
 		[ "$PHYNBR" = "1" ] && \
@@ -99,6 +95,7 @@ case "$board" in
 			macaddr_setbit_la "$(macaddr_add $hw_mac_addr 3)" > /sys${DEVPATH}/macaddress
 		[ "$PHYNBR" = "1" ] && echo -n "$hw_mac_addr" > /sys${DEVPATH}/macaddress
 		;;
+	iptime,ax2002m|\
 	iptime,ax2004m)
 		if [ "$PHYNBR" = "1" ]; then
 			hw_mac_addr="$(mtd_get_mac_binary factory 0x4)"
@@ -117,17 +114,6 @@ case "$board" in
 	keenetic,kn-3510)
 		[ "$PHYNBR" = "1" ] && \
 			macaddr_setbit_la "$(mtd_get_mac_binary rf-eeprom 0x4)" > /sys${DEVPATH}/macaddress
-		;;
-	linksys,e5600|\
-	linksys,ea6350-v4|\
-	linksys,ea7300-v1|\
-	linksys,ea7300-v2|\
-	linksys,ea7500-v2|\
-	linksys,ea8100-v1|\
-	linksys,ea8100-v2)
-		hw_mac_addr=$(mtd_get_mac_ascii devinfo hw_mac_addr)
-		[ "$PHYNBR" = "0" ] && macaddr_add $hw_mac_addr 1 > /sys${DEVPATH}/macaddress
-		[ "$PHYNBR" = "1" ] && macaddr_add $hw_mac_addr 2 > /sys${DEVPATH}/macaddress
 		;;
 	belkin,rt1800|\
 	linksys,e7350)

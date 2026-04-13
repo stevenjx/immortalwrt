@@ -1,3 +1,5 @@
+TRX_ENDIAN := be
+
 define Device/en751221_generic
   DEVICE_VENDOR := EN751221 Family
   DEVICE_MODEL := Initramfs Image
@@ -44,3 +46,13 @@ define Device/tplink_archer-vr1200v-v2
     tplink-v2-header -R 0x400000
 endef
 TARGET_DEVICES += tplink_archer-vr1200v-v2
+
+define Device/zyxel_pmg5617ga
+  DEVICE_VENDOR := Zyxel
+  DEVICE_MODEL := PMG5617GA
+  DEVICE_DTS := en751221_zyxel_pmg5617ga
+  IMAGES := tclinux.trx
+  IMAGE/tclinux.trx := append-kernel | lzma | tclinux-trx
+  DEVICE_PACKAGES := kmod-usb3
+endef
+TARGET_DEVICES += zyxel_pmg5617ga

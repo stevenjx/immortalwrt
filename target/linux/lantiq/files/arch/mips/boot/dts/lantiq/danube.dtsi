@@ -141,7 +141,7 @@
 			interrupts = <126 127 128 129 130 131>;
 		};
 
-		gpios: stp@e100bb0 {
+		stp0: gpio@e100bb0 {
 			#gpio-cells = <2>;
 			compatible = "lantiq,gpio-stp-xway";
 			gpio-controller;
@@ -257,8 +257,7 @@
 			#address-cells = <1>;
 			#size-cells = <0>;
 			compatible = "lantiq,danube-usb";
-			reg = <0xe101000 0x1000
-				0xe120000 0x3f000>;
+			reg = <0xe101000 0x1000>, <0xe120000 0x3f000>;
 			interrupt-parent = <&icu0>;
 			interrupts = <62>;
 			dr_mode = "host";
