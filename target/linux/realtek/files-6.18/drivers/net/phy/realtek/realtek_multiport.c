@@ -300,6 +300,7 @@ static int rtl8214fc_get_features(struct phy_device *phydev)
 	 * announce the superset of all possible features.
 	 */
 	linkmode_set_bit(ETHTOOL_LINK_MODE_1000baseX_Full_BIT, phydev->supported);
+	linkmode_set_bit(ETHTOOL_LINK_MODE_100baseFX_Full_BIT, phydev->supported);
 	linkmode_set_bit(ETHTOOL_LINK_MODE_FIBRE_BIT, phydev->supported);
 
 	return 0;
@@ -325,10 +326,15 @@ static int rtl8214fc_config_aneg(struct phy_device *phydev)
 {
 	int ret;
 
-	if (rtl8214fc_media_is_fibre(phydev))
+	if (rtl8214fc_media_is_fibre(phydev)) {
+		if (linkmode_test_bit(ETHTOOL_LINK_MODE_100baseT_Full_BIT, phydev->advertising)) {
+			linkmode_clear_bit(ETHTOOL_LINK_MODE_100baseT_Full_BIT, phydev->advertising);
+			linkmode_set_bit(ETHTOOL_LINK_MODE_100baseFX_Full_BIT, phydev->advertising);
+		}
 		ret = genphy_c37_config_aneg(phydev);
-	else
+	} else {
 		ret = genphy_config_aneg(phydev);
+	}
 
 	return ret;
 }
@@ -439,6 +445,49 @@ static int rtl821x_config_init(struct phy_device *phydev)
 	/* Disable PHY-mode EEE so LPI is passed to the MAC */
 	phy_modify_paged(phydev, RTL821X_PAGE_MAC, RTL821X_PHYCR2,
 			 RTL821X_PHYCR2_PHY_EEE_ENABLE, 0);
+
+	return 0;
+}
+
+static int rtl8218e_config_init(struct phy_device *phydev)
+{
+	int oldpage, oldxpage;
+	bool is_xsgmii;
+
+	rtl821x_config_init(phydev);
+
+	if (phydev->mdio.addr % 8)
+		return 0;
+
+	oldpage = phy_read(phydev, RTL821x_PAGE_SELECT);
+	oldxpage = phy_read(phydev, RTL821x_EXT_PAGE_SELECT);
+
+	phy_write(phydev, RTL821x_EXT_PAGE_SELECT, 0x8);
+	is_xsgmii = (phy_read_paged(phydev, 0x260, 0x12) & 0xf0) == 0xb0;
+
+	/* QSGMII configuration is not currently supported. */
+	if (!is_xsgmii)
+		goto restore;
+
+	/* Apply the minimal vendor XSGMII configuration, undocumented magic. */
+	phy_write_paged(phydev, 0x4b8, 0x10, 0x8714);
+	phy_write_paged(phydev, 0x4b8, 0x12, 0x7230);
+	phy_write_paged(phydev, 0x4be, 0x16, 0x1000);
+	phy_write_paged(phydev, 0x4bf, 0x11, 0x7000);
+	phy_write_paged(phydev, 0x4bf, 0x16, 0x0042);
+	phy_write_paged(phydev, 0x4ba, 0x14, 0x9d04);
+
+	/* Reset SerDes 0. */
+	phy_write_paged(phydev, 0x400, 0x10, 0x1700);
+	phy_write_paged(phydev, 0x400, 0x10, 0x1703);
+
+	/* Disable XSGMII autonegotiation on both MAC-side channel groups. */
+	phy_modify_paged(phydev, 0x400, 0x12, GENMASK(9, 8), BIT(8));
+	phy_modify_paged(phydev, 0x500, 0x12, GENMASK(9, 8), BIT(8));
+
+restore:
+	phy_write(phydev, RTL821x_EXT_PAGE_SELECT, oldxpage);
+	phy_write(phydev, RTL821x_PAGE_SELECT, oldpage);
 
 	return 0;
 }
@@ -675,7 +724,7 @@ static struct phy_driver rtl83xx_phy_driver[] = {
 	{
 		PHY_ID_MATCH_EXACT(PHY_ID_RTL8218E),
 		.name		= "REALTEK RTL8218E",
-		.config_init	= rtl821x_config_init,
+		.config_init	= rtl8218e_config_init,
 		.features	= PHY_GBIT_FEATURES,
 		.probe		= rtl8218x_phy_probe,
 		.read_mmd	= rtl821x_read_mmd,

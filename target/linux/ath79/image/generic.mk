@@ -162,7 +162,10 @@ define Build/zyxel-tar-bz2
 	mkdir -p $@.tmp
 	mv $@ $@.tmp/$(word 2,$(1))
 	cp $(KDIR)/loader-$(DEVICE_NAME).uImage $@.tmp/$(word 1,$(1)).lzma.uImage
-	$(TAR) -cjf $@ -C $@.tmp .
+	$(TAR) -cjf $@ -C $@.tmp --no-recursion \
+		--numeric-owner --owner=0 --group=0 --mode=go-w \
+		$(if $(SOURCE_DATE_EPOCH),--mtime="@$(SOURCE_DATE_EPOCH)") \
+		. ./$(word 1,$(1)).lzma.uImage ./$(word 2,$(1))
 	rm -rf $@.tmp
 endef
 
@@ -577,7 +580,7 @@ define Device/avm_fritz300e
   SOC := ar7242
   IMAGE_SIZE := 15232k
   DEVICE_MODEL := FRITZ!WLAN Repeater 300E
-  DEVICE_PACKAGES += rssileds -swconfig
+  DEVICE_PACKAGES += rssileds kmod-phy-intel-xway -swconfig
   SUPPORTED_DEVICES += fritz300e
 endef
 TARGET_DEVICES += avm_fritz300e
@@ -1317,6 +1320,27 @@ define Device/dlink_dir-842-c3
   DEVICE_PACKAGES := kmod-ath10k-ct ath10k-firmware-qca9888-ct
 endef
 TARGET_DEVICES += dlink_dir-842-c3
+
+define Device/dragino2_common
+  SOC := ar9330
+  DEVICE_VENDOR := Dragino
+  DEVICE_PACKAGES := kmod-usb-chipidea2
+  IMAGE_SIZE := 16000k
+  SUPPORTED_DEVICES += dragino2
+endef
+
+define Device/dragino_lps8
+  $(Device/dragino2_common)
+  DEVICE_MODEL := LPS8
+  DEVICE_PACKAGES += kmod-spi-gpio kmod-spi-dev
+endef
+TARGET_DEVICES += dragino_lps8
+
+define Device/dragino_ms14
+  $(Device/dragino2_common)
+  DEVICE_MODEL := MS14
+endef
+TARGET_DEVICES += dragino_ms14
 
 define Device/elecom_wab
   DEVICE_VENDOR := ELECOM
@@ -3009,20 +3033,6 @@ define Device/siemens_ws-ap3610
   KERNEL_INITRAMFS := kernel-bin | append-dtb | uImage none
 endef
 TARGET_DEVICES += siemens_ws-ap3610
-
-define Device/sitecom_wlr-7100
-  SOC := ar1022
-  DEVICE_VENDOR := Sitecom
-  DEVICE_MODEL := WLR-7100
-  DEVICE_PACKAGES := ath10k-firmware-qca988x-ct kmod-ath10k-ct-smallbuffers kmod-usb2
-  IMAGES += factory.dlf
-  IMAGE/factory.dlf := append-kernel | pad-to $$$$(BLOCKSIZE) | \
-	append-rootfs | pad-rootfs | check-size | \
-	senao-header -r 0x222 -p 0x53 -t 2
-  IMAGE_SIZE := 7488k
-  DEFAULT := n
-endef
-TARGET_DEVICES += sitecom_wlr-7100
 
 define Device/sitecom_wlr-8100
   SOC := qca9558

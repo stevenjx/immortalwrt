@@ -5,7 +5,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aic8800
-PKG_RELEASE:=1
+PKG_RELEASE:=5
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/radxa-pkg/aic8800.git
@@ -53,7 +53,8 @@ endef
 
 define KernelPackage/aic8800-sdio
   $(call KernelPackage/aic8800/Default,SDIO)
-  DEPENDS+= +aic8800-sdio-firmware +kmod-mmc +AIC8800_SDIO_BT_SUPPORT:kmod-bluetooth
+  DEPENDS+= +aic8800-sdio-firmware +kmod-mmc \
+	+AIC8800_SDIO_BT_SUPPORT:input-support +AIC8800_SDIO_BT_SUPPORT:kmod-bluetooth
   FILES:= \
 	$(PKG_BUILD_DIR)/src/SDIO/driver_fw/driver/aic8800/aic8800_bsp/aic8800_bsp.ko \
 	$(PKG_BUILD_DIR)/src/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/aic8800_fdrv.ko

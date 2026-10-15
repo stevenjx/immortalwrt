@@ -8,9 +8,9 @@ PKG_LICENSE_FILES:=
 
 PKG_SOURCE_URL:=https://github.com/openwrt/mt76
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_DATE:=2026-03-21
-PKG_SOURCE_VERSION:=018f60316d4dd6b4e741874eda40e2dfaa29df3b
-PKG_MIRROR_HASH:=54a8125453a6fe04c89cf5335bdf0ea16c409361e1e5a79fb339d67cee26df0e
+PKG_SOURCE_DATE:=2026-10-08
+PKG_SOURCE_VERSION:=467ae2e3f190baf737e15e318906da0dc7d0ab91
+PKG_MIRROR_HASH:=2456aeba71bcda19445d539c11f165ab79f5c253345e0c6f6b3b506de01c0fdb
 
 PKG_MAINTAINER:=Felix Fietkau <nbd@nbd.name>
 PKG_USE_NINJA:=0
@@ -187,7 +187,7 @@ endef
 define KernelPackage/mt7622-firmware
   $(KernelPackage/mt76-default)
   TITLE:=MediaTek MT7622 firmware
-  DEPENDS+=+kmod-mt7615e
+  DEPENDS+=@TARGET_mediatek_mt7622 +kmod-mt7615e
 endef
 
 define KernelPackage/mt7663-firmware-ap
